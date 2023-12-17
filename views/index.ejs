@@ -1,13 +1,28 @@
 <%-include("partials/header.ejs")%>
 <body>
-    <form action="/login" method="post">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required>
-    
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
-    
-        <button type="submit">Login</button>
-    </form>
+    <%if (locals.user) {%>
+        <h1>Welcome back, <%= user.username %></h1>
+        <h2>username: <%= user.username %></h2>
+        <h2>password: <%= user.password %></h2>
+        <h2>id: <%= user.id %></h2>
+    <%} else {%>
+        <form method="POST">
+            <fieldset>
+                <legend><%=locals.route === "login"?"User Login":"User Register" %></legend>
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" value="<%= locals.message %>" required>
+            
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+            </fieldset>
+            <% if (locals.route === "login") {%>
+                <button type="submit" formaction="/login">Login</button>
+                <a href="/register">Register</a>
+            <%} else{%>
+                <a href="/login">Login</a>
+                <button type="submit" formaction="/register">Register</button>
+            <%}%>
+        </form>
+    <%}%>
 </body>
 <%-include("partials/footer.ejs")%>

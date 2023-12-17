@@ -2,7 +2,6 @@ body{
     background-color: rgb(112, 174, 179);
 }
 
-form{
-    background-color: rgb(33, 126, 126);
+fieldset{
     border-radius: 10px;
 }
