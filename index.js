@@ -100,7 +100,6 @@ async function registerUser(username, password){
         try {
             const res = await db.query("INSERT INTO users (username, password) VALUES ($1,$2)",[username, password]);
             console.log("New user has been registered:");
-            console.log(res);
             return {userRegistered:true};
         } catch (error) {
             console.error(error.message);
