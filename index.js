@@ -52,7 +52,9 @@ app.get("/login", (req,res)=>{
 app.post("/register", async (req,res)=>{
     try {
         const user = await registerUser(req.body.username, req.body.password);
-        res.render("index.ejs", {route:"login"});
+        user.userRegistered
+        ?res.render("index.ejs", {route:"login", message:user.message})
+        :res.render("index.ejs", {route:"register", message:user.message}); 
     } catch (error) {
         console.error("Error:", error.message);
         res.render("index.ejs", {message: "Register error", route:"register"});
@@ -93,11 +95,29 @@ async function getUser(id){
 }
 
 async function registerUser(username, password){
+    const existing_username = await existingUsername(username);
+    if (!existing_username) {
+        try {
+            const res = await db.query("INSERT INTO users (username, password) VALUES ($1,$2)",[username, password]);
+            console.log("New user has been registered:");
+            console.log(res);
+            return {userRegistered:true};
+        } catch (error) {
+            console.error(error.message);
+            return {userRegistered:false};
+        }
+    }else{
+        console.log("username already exists");
+        return {userRegistered:false,message:"username alraedy exists"};
+    }
+}
+
+async function existingUsername(username){
     try {
-        const res = await db.query("INSERT INTO users (username, password) VALUES ($1,$2)",[username, password]);
-        console.log("New user has been registered:");
-        console.log(res);
+        const res = await db.query("SELECT * FROM users WHERE username = $1", [username])
+        return res.rowCount>0?true:false;
     } catch (error) {
-        console.error(error.message);
+        console.error("Error:", error.message);
+        return false;
     }
 }
