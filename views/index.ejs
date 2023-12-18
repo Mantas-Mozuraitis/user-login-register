@@ -8,20 +8,46 @@
     <%} else {%>
         <form method="POST">
             <fieldset>
+
                 <legend><%=locals.route === "login"?"User Login":"User Register" %></legend>
-                <label for="username">Username:</label>
-                <input type="text" id="username" name="username" value="<%= locals.message %>" required>
+
+                <div class="label-input">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" value="<%=locals.reg_username%>" required>
+                </div>
             
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
+                <div class="label-input">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+
+                <%if (locals.route === "register") {%>
+                    <div class="label-input">
+                        <label for="re_password">Confirm password</label>
+                        <input type="password" id="re_password" name="re_password" required>
+                    </div>
+                <%}%>
+
             </fieldset>
-            <% if (locals.route === "login") {%>
-                <button type="submit" formaction="/login">Login</button>
-                <a href="/register">Register</a>
-            <%} else{%>
-                <a href="/login">Login</a>
-                <button type="submit" formaction="/register">Register</button>
-            <%}%>
+
+
+            <div class="message">
+                <p>
+                        <%=locals.message%>
+                    <br>
+                </p>
+            </div>
+
+
+            <div class="buttons">
+                <% if (locals.route === "login") {%>
+                    <button type="submit" formaction="/login">Login</button>
+                    <a href="/register">Register</a>
+                <%} else{%>
+                    <a href="/login">Login</a>
+                    <button type="submit" formaction="/register">Register</button>
+                <%}%>
+            </div>
         </form>
     <%}%>
 </body>

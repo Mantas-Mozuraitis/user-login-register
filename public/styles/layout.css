@@ -1,3 +1,8 @@
+:root, *, html{
+    font-family: 'Dosis', sans-serif;
+}
+
+
 body{
     min-height: 100vh;
     max-width: 100%;
@@ -7,6 +12,7 @@ body{
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    background-color: white;
 }
 
 form{
@@ -23,12 +29,54 @@ fieldset{
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+    border: none;
 }
 
 fieldset legend{
     text-align: center;
+    background-color: bisque;
+    font-size: 1.5rem;
+    padding: 1rem;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
 }
 
-fieldset > label, input{
+.label-input{
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.label-input > label, input{
     width: 400px;
+}
+
+fieldset input{
+    border: none;
+    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+    border-radius: 5px;
+    font-size: 1rem;
+    padding: 0.5rem;
+}
+
+form .buttons{
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+}
+
+form button, a{
+    padding:0.5rem 2rem;
+    font-size: 1rem;
+    text-align: center;
+    text-decoration: none;
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+    border-radius: 10px;
+    border: none;
+    color: black;
+    font-weight: none;
+    cursor: pointer;
 }
