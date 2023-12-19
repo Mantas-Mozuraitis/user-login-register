@@ -8,7 +8,6 @@ export function initialize(passport, getUserByUsername, getUser){
     const authenticateUser = async (username, password, done) => {
         const user = await getUserByUsername(username);
         console.log(password);
-        console.log(user.password);
         if (user == null) {
             return done(null, false, {message:"No user with that username"});
         }

@@ -15,7 +15,7 @@ import {initialize} from "./passport-config.js";
 initialize(passport,username => getUserByUsername(username), id => getUser(id));
 
 const app = express();
-const port = 3000;
+const port = 3000;  
 
 const db = new pg.Client({
     host:"localhost",
@@ -38,13 +38,20 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use((req, res, next) => {
+    console.log("req.session", req.session);
+    console.log("req.user", req.user);
+    next();
+});
+
 app.get("/", (req,res) => {
     res.render("index.ejs", {route:"login"});
 })
 
 // GET USER ACCOUNT PAGE
-app.get("/myaccount",async (req,res)=>{
-    res.render("index.ejs", {user:req.user});
+app.get("/myaccount", (req,res)=>{
+    console.log(req.user);
+    res.render("account.ejs", {user:req.user});
 })
 
 // USER LOGIN POST
@@ -53,28 +60,6 @@ app.post("/login", passport.authenticate("local", {
     failureRedirect:"/login",
     failureFlash:true,
 }))
-
-// app.post("/login", async (req,res) => {
-//     const username_input = req.body.username;
-//     try {
-//         const user = await existingUser(username_input, req.body.password);
-//         if (user.isValidUser) {
-//             res.redirect(`/myaccount/${user.userData.id}`);
-//         }else{
-//             try {
-//                 await existingUsername(username_input)
-//                 ?res.render("index.ejs", {message: "Entered password is not correct, try again", route:"login"})
-//                 :res.render("index.ejs", {message: "User does not exist, please register", route:"login"});
-//             } catch (error) {
-//                 console.error("Error:", error.message);
-//             }
-//         }
-//     } catch (error) {
-//         console.error("Error:", error.message);
-//         res.render("index.ejs", {message: "An error occurred during login", route:"login"});
-//     }
-// })
-
 
 // USER LOGIN GET 
 app.get("/login", (req,res)=>{
@@ -175,3 +160,26 @@ async function getUserByUsername(username){
         return null;
     }
 }
+
+
+
+// app.post("/login", async (req,res) => {
+//     const username_input = req.body.username;
+//     try {
+//         const user = await existingUser(username_input, req.body.password);
+//         if (user.isValidUser) {
+//             res.redirect(`/myaccount/${user.userData.id}`);
+//         }else{
+//             try {
+//                 await existingUsername(username_input)
+//                 ?res.render("index.ejs", {message: "Entered password is not correct, try again", route:"login"})
+//                 :res.render("index.ejs", {message: "User does not exist, please register", route:"login"});
+//             } catch (error) {
+//                 console.error("Error:", error.message);
+//             }
+//         }
+//     } catch (error) {
+//         console.error("Error:", error.message);
+//         res.render("index.ejs", {message: "An error occurred during login", route:"login"});
+//     }
+// })
