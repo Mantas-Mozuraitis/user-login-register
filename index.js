@@ -51,7 +51,9 @@ app.get("/", (req,res) => {
 // GET USER ACCOUNT PAGE
 app.get("/myaccount", (req,res)=>{
     console.log(req.user);
-    res.render("account.ejs", {user:req.user});
+    req.user
+    ?res.render("account.ejs", {user:req.user})
+    :res.redirect("/");
 })
 
 // USER LOGIN POST
@@ -86,6 +88,14 @@ app.get("/register", (req,res)=>{
     res.render("index.ejs", {route:"register"});
 })
 
+app.get('/logout', function(req, res) {
+    req.logout(function(err) {
+        if (err) {
+          return res.status(500).json({ message: 'Logout failed' });
+        }
+        res.redirect('/');
+      });
+});
 
 
 

@@ -16,7 +16,7 @@ export function initialize(passport, getUserByUsername, getUser){
             if (await bcrypt.compare(password, user.password)) {
                 return done(null,user);
             }else{
-                return done(null, false, {message:"Passwpord incorrect"});
+                return done(null, false, {message:"Password incorrect"});
             }
         } catch (error) {
             return done (error);
