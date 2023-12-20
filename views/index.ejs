@@ -1,47 +1,49 @@
 <%-include("partials/header.ejs")%>
 <body>
-    <form method="POST">
-        <fieldset>
-
-            <legend><%=locals.route === "login"?"User Login":"User Register" %></legend>
-
-            <div class="label-input">
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username" value="<%=locals.reg_username%>" required>
-            </div>
-        
-            <div class="label-input">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" required>
-            </div>
-
-            <%if (locals.route === "register") {%>
+    <div class="index-wrapper">
+        <form method="POST">
+            <fieldset>
+    
+                <legend><%=locals.route === "login"?"User Login":"User Register" %></legend>
+    
                 <div class="label-input">
-                    <label for="re_password">Confirm password</label>
-                    <input type="password" id="re_password" name="re_password" required>
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" value="<%=locals.reg_username%>" required>
                 </div>
-            <%}%>
-
-        </fieldset>
-
-
-        <div class="message">
-            <p>
-                    <%=locals.message||locals.messages.error%>
-                <br>
-            </p>
-        </div>
-
-
-        <div class="buttons">
-            <% if (locals.route === "login") {%>
-                <button type="submit" formaction="/login">Login</button>
-                <a href="/register">Register</a>
-            <%} else{%>
-                <a href="/login">Go back to Login page</a>
-                <button type="submit" formaction="/register">Register</button>
-            <%}%>
-        </div>
-    </form>
+            
+                <div class="label-input">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+    
+                <%if (locals.route === "register") {%>
+                    <div class="label-input">
+                        <label for="re_password">Confirm password</label>
+                        <input type="password" id="re_password" name="re_password" required>
+                    </div>
+                <%}%>
+    
+            </fieldset>
+    
+    
+            <div class="message">
+                <p>
+                        <%=locals.message||locals.messages.error%>
+                    <br>
+                </p>
+            </div>
+    
+    
+            <div class="buttons">
+                <% if (locals.route === "login") {%>
+                    <button type="submit" formaction="/login">Login</button>
+                    <a href="/register">Register</a>
+                <%} else{%>
+                    <a href="/login">Go back to Login page</a>
+                    <button type="submit" formaction="/register">Register</button>
+                <%}%>
+            </div>
+        </form>
+    </div>
 </body>
 <%-include("partials/footer.ejs")%>
