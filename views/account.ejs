@@ -13,20 +13,15 @@
         </nav>
         <main>
             <% if (locals.player) {%>
-                <table>
-                    <tr>
-                        <td>POWER</td>
-                        <td><%=player.power%></td>
-                    </tr>
-                    <tr>
-                        <td>DEFENCE</td> 
-                        <td><%=player.defense%></td>
-                    </tr>
-                    <tr>
-                        <td>LEVEL</td>
-                        <td><%=player.level%></td>
-                    </tr>
-                </table>
+                <div class="player-power">
+                    <p>POWER <%=player.power%></p>
+                </div>
+                <div class="player-defense">
+                    <p>DEFENCE <%=player.defense%></p>
+                </div>
+                <div class="player-icon">
+                    
+                </div>
             <%}else{%>
                 <form action="/create-player" method="POST">
                     <button type="submit">Create Player</button>

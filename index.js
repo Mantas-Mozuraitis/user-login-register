@@ -15,6 +15,7 @@ import {initialize} from "./passport-config.js";
 initialize(passport,username => getUserByUsername(username), id => getUser(id));
 
 const app = express();
+
 const port = 3000;    
 
 const db = new pg.Client({
@@ -125,17 +126,6 @@ app.listen(port, (req,res)=>{
 
 
 // USER FUNCTIONS 
-
-async function existingUser(username, password) {
-    try {
-        const res = await db.query("SELECT * FROM users WHERE username = $1 AND password = $2",[username, password]);
-        return res.rowCount>0?{isValidUser:true,userData:res.rows[0]}:{isValidUser:false};
-    } catch (error) {
-        console.error("Error:", error.message);
-        return false;
-    }
-}
-
 async function getUser(id){
     try {
         const res = await db.query("SELECT * FROM users WHERE id = $1",[id]);
@@ -151,7 +141,7 @@ async function registerUser(username, password, re_password){
     if (!existing_username) {
         if (password === re_password) {
             try {
-                const hashedPassword = await bcrypt.hash(password, 10);
+                const hashedPassword = await bcrypt.hash(password, Math.random()*(10-5)+5);
                 await db.query("INSERT INTO users (username, password) VALUES ($1,$2)",[username, hashedPassword]);
                 console.log("New user has been registered");
                 return {userRegistered:true};
