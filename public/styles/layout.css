@@ -106,6 +106,10 @@ nav{
     background-color:whitesmoke;
     min-width: 100%;
 }
+nav .level-xp{
+    display: flex;
+    gap: 2rem;
+}
 nav a, nav p{
     text-decoration: none;
     padding: 0.2rem 1rem;

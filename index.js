@@ -15,7 +15,7 @@ import {initialize} from "./passport-config.js";
 initialize(passport,username => getUserByUsername(username), id => getUser(id));
 
 const app = express();
-const port = 3000;  
+const port = 3000;    
 
 const db = new pg.Client({
     host:"localhost",
@@ -38,24 +38,33 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+// Display current session and user when authenticated
 app.use((req, res, next) => {
     console.log("req.session", req.session);
     console.log("req.user", req.user);
     next();
 });
 
+// STARTING PAGE
 app.get("/", (req,res) => {
     res.render("index.ejs", {route:"login"});
 })
 
 // GET USER ACCOUNT PAGE
-app.get("/myaccount", (req,res)=>{
-    console.log(req.user);
-    req.user
-    ?res.render("account.ejs", {user:req.user})
-    :res.redirect("/");
+app.get("/myaccount", async (req,res)=>{
+    if (req.user) {
+        try {
+            const player = await getPlayer(req.user.id);
+            res.render("account.ejs", player?{user:req.user, player:player}:{user:req.user});
+        } catch (error) {
+            console.error("Error:", error.message);
+            res.render("/");
+        }
+    }else{
+        res.render("/");
+    }
 })
-
+ 
 // USER LOGIN POST
 app.post("/login", passport.authenticate("local", {
     successRedirect:"/myaccount",
@@ -67,8 +76,6 @@ app.post("/login", passport.authenticate("local", {
 app.get("/login", (req,res)=>{
     res.render("index.ejs", {route:"login"});
 })
-
-
 
 // USER REGISTER POST 
 app.post("/register", async (req,res)=>{
@@ -88,6 +95,7 @@ app.get("/register", (req,res)=>{
     res.render("index.ejs", {route:"register"});
 })
 
+// USER LOGOUT
 app.get('/logout', function(req, res) {
     req.logout(function(err) {
         if (err) {
@@ -96,6 +104,16 @@ app.get('/logout', function(req, res) {
         res.redirect('/');
       });
 });
+
+// CREATE PLAYER
+app.post("/create-player", async(req,res)=>{
+    try {
+        await createPlayer(req.user.id);
+        res.redirect("/myaccount");
+    } catch (error) {
+        console.error("Error:", error.message);
+    }
+})
 
 
 
@@ -106,7 +124,7 @@ app.listen(port, (req,res)=>{
 
 
 
-// FUNCTIONS 
+// USER FUNCTIONS 
 
 async function existingUser(username, password) {
     try {
@@ -172,24 +190,23 @@ async function getUserByUsername(username){
 }
 
 
+// PLAYER FUNCTIONS
 
-// app.post("/login", async (req,res) => {
-//     const username_input = req.body.username;
-//     try {
-//         const user = await existingUser(username_input, req.body.password);
-//         if (user.isValidUser) {
-//             res.redirect(`/myaccount/${user.userData.id}`);
-//         }else{
-//             try {
-//                 await existingUsername(username_input)
-//                 ?res.render("index.ejs", {message: "Entered password is not correct, try again", route:"login"})
-//                 :res.render("index.ejs", {message: "User does not exist, please register", route:"login"});
-//             } catch (error) {
-//                 console.error("Error:", error.message);
-//             }
-//         }
-//     } catch (error) {
-//         console.error("Error:", error.message);
-//         res.render("index.ejs", {message: "An error occurred during login", route:"login"});
-//     }
-// })
+async function createPlayer(id){
+    try {
+        await db.query("INSERT INTO player (user_id, power, defense, level, xp) VALUES ($1, 0, 0, 0, 0)", [id]);
+        console.log("new player has been created");
+    } catch (error) {
+        console.error("Error:", error.message);
+    }
+}
+
+async function getPlayer(user_id){
+    try {
+        const player = await db.query("SELECT * FROM player WHERE user_id = $1", [user_id])
+        return player.rows[0];
+    } catch (error) {
+        console.error("Error:", error.message);
+        return null;
+    }
+}

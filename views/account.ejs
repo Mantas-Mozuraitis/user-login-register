@@ -2,29 +2,36 @@
 <body>
     <div class="account-wrapper">
         <nav>
-            <p>Welcome, <%= user.username %></p>
-            <div class="right">
-                <a href="#">Home</a>
-                <a href="#">Profile</a>
-                <a href="#">Settings</a>
-            </div>
+            <p>Logged in user:  <%= user.username %></p>
+            <% if(locals.player){ %>
+                <div class="level-xp">
+                    <p>LEVEL: <%=player.level%></p>
+                    <p>XP (<%=player.xp%>/100)</p>
+                </div>
+            <%}%>
+            <a href="/logout">Logout</a>
         </nav>
         <main>
-            <table>
-                <tr>
-                    <td>username</td>
-                    <td><%=user.username%></td>
-                </tr>
-                <tr>
-                    <td>id</td>
-                    <td><%=user.id%></td>
-                </tr>
-                <tr>
-                    <td>password</td>
-                    <td><%=user.password%></td>
-                </tr>
-            </table>
-            <a href="/logout">Logout</a>
+            <% if (locals.player) {%>
+                <table>
+                    <tr>
+                        <td>POWER</td>
+                        <td><%=player.power%></td>
+                    </tr>
+                    <tr>
+                        <td>DEFENCE</td> 
+                        <td><%=player.defense%></td>
+                    </tr>
+                    <tr>
+                        <td>LEVEL</td>
+                        <td><%=player.level%></td>
+                    </tr>
+                </table>
+            <%}else{%>
+                <form action="/create-player" method="POST">
+                    <button type="submit">Create Player</button>
+                </form>
+            <%}%>
         </main>
     </div>
 </body>
