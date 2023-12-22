@@ -1,5 +1,33 @@
 <%-include("partials/header.ejs")%>
 <body>
-    <h1>Hi, <%= user.username %></h1>
+    <div class="account-wrapper">
+        <nav>
+            <p>Logged in user:  <%= user.username %></p>
+            <% if(locals.player){ %>
+                <div class="level-xp">
+                    <p>LEVEL: <%=player.level%></p>
+                    <p>XP (<%=player.xp%>/100)</p>
+                </div>
+            <%}%>
+            <a href="/logout">Logout</a>
+        </nav>
+        <main>
+            <% if (locals.player) {%>
+                <div class="player-power">
+                    <p>POWER <%=player.power%></p>
+                </div>
+                <div class="player-defense">
+                    <p>DEFENCE <%=player.defense%></p>
+                </div>
+                <div class="player-icon">
+                    
+                </div>
+            <%}else{%>
+                <form action="/create-player" method="POST">
+                    <button type="submit">Create Player</button>
+                </form>
+            <%}%>
+        </main>
+    </div>
 </body>
 <%-include("partials/footer.ejs")%>
